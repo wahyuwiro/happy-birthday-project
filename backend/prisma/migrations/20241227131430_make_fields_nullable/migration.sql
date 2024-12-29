@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "password" DROP NOT NULL,
+ALTER COLUMN "location" DROP NOT NULL,
+ALTER COLUMN "timezone" DROP NOT NULL;
