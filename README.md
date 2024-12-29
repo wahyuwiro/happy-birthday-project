@@ -39,7 +39,24 @@ cp frontend/.env.example frontend/.env
 cp backend/.env.example backend/.env
 ```
 
-## 4. Run the Project
+## 4. Cron Job Configuration
+The backend includes a cron job that sends birthday messages to users based on their time zones. The cron job is defined in the following file:
+```
+//backend/src/user/user.service.ts
+```
+
+#### Cron Job Details
+- **Runs every hour**: The cron job checks user birthdays every hour.
+- **Runs at 9 AM local time**: The job determines if it is the user's birthday and if the local time is 9 AM for the user.
+
+#### Notes
+
+- The job fetches all users and checks if their birthday matches the current date and local time is 9 AM.
+- If conditions are met, a birthday message is created and sent via an external email service.
+- Retry mechanisms and message status updates are implemented for reliability.
+
+
+## 5. Run the Project
 Start the backend and frontend services:
 ```
 # Run the backend (in backend folder)
