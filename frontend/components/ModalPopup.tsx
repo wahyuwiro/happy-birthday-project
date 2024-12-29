@@ -11,7 +11,7 @@ const ModalPopup = ({ isOpen, onClose, onConfirm, message }: ModalPopupProps) =>
   if (!isOpen) return null; // Do not render modal if not open
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50 text-black">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
         <h3 className="text-lg font-bold mb-4">Confirm Deletion</h3>
         <p className="mb-4">{message}</p>
