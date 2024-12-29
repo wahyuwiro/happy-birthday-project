@@ -21,7 +21,7 @@ const UserList: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3001/user');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`)
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }

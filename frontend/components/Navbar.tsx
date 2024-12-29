@@ -42,7 +42,6 @@ export default function Navbar() {
 
   // Function to handle active menu click
   const handleMenuClick = (menu: string) => {
-    console.log("menu", menu);
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
     if (menu === "home") router.push(baseUrl);
     else router.push(baseUrl + "/" + menu);

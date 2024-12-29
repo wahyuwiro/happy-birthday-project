@@ -107,7 +107,6 @@ const Profile: FC = () => {
     };
     
     useEffect(() => {
-        console.log('session', session);
         if(session?.user?.id) {
             fetchData();
         }
@@ -117,7 +116,6 @@ const Profile: FC = () => {
         e.preventDefault();
         try {
             const url = `${process.env.NEXT_PUBLIC_API_URL}/user/${session?.user?.id}`;
-            console.log('formData:', formData);
             const response = await fetch(url, {
               method: "PATCH",
               headers: {

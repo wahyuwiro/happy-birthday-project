@@ -1,16 +1,21 @@
 'use client';
 
 import UserList from '@/components/UserList';
-
+import { useRouter } from "next/navigation";
 import { useSession } from 'next-auth/react';
+import React, { useEffect } from "react";
 
 export default function Home() {
-  const { data: session, status } = useSession(); // You can also check `status` for loading states
-  console.log('info :',{
-    session: session,
-    status : status
-  });
+  const router = useRouter();
 
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    if (status === 'loading') return; // Wait for session to load
+
+    if (!session) {
+      router.push('/auth/signin');
+    }
+  }, [session, status, router]);
   return (
     <div>
       <h1 className="text-4xl font-bold mb-6">Welcome to the Happy Birthday User Management</h1>

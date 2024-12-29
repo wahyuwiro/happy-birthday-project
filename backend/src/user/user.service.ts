@@ -52,7 +52,6 @@ export class UserService {
   // @Cron('* * * * *') // Runs every minute
   async sendBirthdayMessages() {
     const users = await this.getAllUsers();
-    console.log('Users:', users);
     const now = moment();
     for (const user of users) {
       const userTime = moment.tz(now, user.timezone); // User's local time
@@ -82,26 +81,21 @@ export class UserService {
             // Save the birthday message as pending
             const birthdayMessage = await this.prisma.birthdayMessage.create({
               data: {
-                userId: user.id, // Foreign key to the User
-                message: `Hey, ${user.firstName} ${user.lastName}, it’s your birthday!`, // Message content
-                status: 'pending', // Initially set as pending
-                timestamp: birthday.toDate(), // Scheduled time for the message
-                retryCount: 0, // Retry count is 0 initially
+                userId: user.id,
+                message: `Hey, ${user.firstName} ${user.lastName}, it’s your birthday!`,
+                status: 'pending',
+                timestamp: birthday.toDate(),
+                retryCount: 0,
               },
             });
             messageId=birthdayMessage.id;
 
-            // Simulate sending the message (replace with actual API call)
+            // Sending the message
             const response = await axios.post('https://email-service.digitalenvision.com.au/send-email', {
               email: `${user.email}`,
               message: message,
             });
-            console.log('Response:', {
-              status: response.status,
-              data: response.data,
-            });
 
-            // Check the response status to determine if the message was sent successfully
             if (response.status === 200) {
               // If successful, update the message status to 'sent'
               await this.prisma.birthdayMessage.update({
@@ -114,8 +108,7 @@ export class UserService {
               await this.prisma.birthdayMessage.update({
                 where: { id: messageId },
                 data: { status: response.data.status ?? 'failed' },
-              });
-              console.log(`Failed to send message to ${user.firstName}. Status: ${response.status}`);
+              });              
             }
           }
         } catch (error) {
@@ -124,14 +117,13 @@ export class UserService {
             where: { id: messageId },
             data: { status: 'failed' },
           });
-          console.log(`Failed to send message to ${user.firstName}:`, error.message);
         }
       }
     }
   }
 
   // Retry failed messages
-  @Cron('0 0 * * *') // Runs once a day, you can change the schedule
+  @Cron('0 0 * * *') // Runs once a day
   // @Cron('* * * * *') // Runs every minute
   async retryFailedMessages() {
     const failedMessages = await this.prisma.birthdayMessage.findMany({
@@ -140,7 +132,7 @@ export class UserService {
         retryCount: { lt: 3 }, // Retry up to 3 times
       },
       include: {
-        user: true, // Include user information
+        user: true,
       },
     });
     
@@ -152,7 +144,6 @@ export class UserService {
         });
 
         if (response.status === 200) {
-          // If successful, mark the message as sent
           await this.prisma.birthdayMessage.update({
             where: { id: message.id },
             data: { status: response.data.status ?? 'sent' },
@@ -161,9 +152,8 @@ export class UserService {
           throw new Error('Non-200 response from the API');
         }
       } catch (error) {
-        console.log(`Failed to resend message ID ${message.id}:`, error.message);
+        console.log('Error:', error);
   
-        // Increment retry count on failure
         await this.prisma.birthdayMessage.update({
           where: { id: message.id },
           data: { retryCount: message.retryCount + 1 },
