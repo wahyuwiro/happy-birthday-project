@@ -53,7 +53,9 @@ The backend includes a cron job that sends birthday messages to users based on t
 
 - The job fetches all users and checks if their birthday matches the current date and local time is 9 AM.
 - If conditions are met, a birthday message is created and sent via an external email service.
-- Retry mechanisms and message status updates are implemented for reliability.
+- The function for sending messages is ```sendBirthdayMessages```. All messages are logged in the PostgreSQL table ```BirthdayMessage```.
+- If a message fails to send, it will be retried the following day based on log data for messages with a status of "not sent", The function for re-sending messages is ```retryFailedMessages```.
+- Retry mechanisms and message status updates are implemented for reliability
 
 
 ## 5. Run the Project
