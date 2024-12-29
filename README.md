@@ -38,6 +38,12 @@ cp frontend/.env.example frontend/.env
 # For the backend folder
 cp backend/.env.example backend/.env
 ```
+### Database Connection
+Ensure the ```DATABASE_URL``` variable is correctly configured in the backend ```.env``` file to connect to your PostgreSQL database. For example:
+```
+DATABASE_URL=postgresql://username:password@host:port/database_name
+```
+
 
 ## 4. Cron Job Configuration
 The backend includes a cron job that sends birthday messages to users based on their time zones. The cron job is defined in the following file:
