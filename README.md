@@ -77,3 +77,7 @@ npm run dev
 
 ```
 Your project should now be running! 🎉
+
+## 6. Demo
+To see a demonstration of the application running locally, check the following link:
+https://youtu.be/UMJZZFNpejo
